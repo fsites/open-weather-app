@@ -1,16 +1,18 @@
 angular.module('OWMApp', ['ngRoute'])
+	.value('owmCities', ['New York', 'Dallas', 'Chicago'])
     .config(['$routeProvider', function($routeProvider) {
         $routeProvider.when('/', {
             templateUrl : 'home.html',
             controller : 'HomeCtrl'
-        }).when('/city', {
+        })
+        .when('/cities/:city', {
             templateUrl : 'city.html',
             controller : 'CityCtrl'
         });
     }])
-    .controller('HomeCtrl', function($scope) {
+    .controller('HomeCtrl', ['$scope', function($scope) {
         //empty for now
-    })
-    .controller('CityCtrl', function($scope) {
-        $scope.city = 'New York';
-    });
+    }])
+    .controller('CityCtrl', ['$scope', '$routeParams', function($scope, $routeParams) {
+        $scope.city = $routeParams.city;
+    }]);
