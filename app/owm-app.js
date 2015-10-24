@@ -1,9 +1,28 @@
 angular.module('OWMApp', ['ngRoute'])
+
+//CITY VALUES
 	.value('owmCities', ['New York', 'Dallas', 'Chicago'])
+
+//SETS BOOLEAN FOR LOADING
+    .run(function($rootScope, $location, $timeout) {
+        $rootScope.$on('$routeChangeError', function() {
+            $location.path('/error');
+        });
+        $rootScope.$on('$routeChangeStart', function() {
+            $rootScope.isLoading = true;
+        });
+        $rootScope.$on('$routeChangeSuccess', function() {
+            $timeout(function() {
+                $rootScope.isLoading = false;
+            }, 1000);
+        });
+    })
+
+//ROUTING CONFIG
     .config(function($routeProvider) {
         $routeProvider.when('/', {
-            templateUrl : 'home.html',
-            controller : 'HomeCtrl'
+            templateUrl : 'main.html',
+            controller : 'MainCtrl'
         })
         .when('/cities/:city', {
             templateUrl : 'city.html',
@@ -20,14 +39,17 @@ angular.module('OWMApp', ['ngRoute'])
             	}
             }
         })
-        .when('/error', {
-        	template : '<p>Error - Page not found</p>'
+        .when('/error' {
+            template : '<p>where you going? Theres nothing here...</p>'
         })
         .otherwise('/error');
     })
-    .controller('HomeCtrl', ['$scope', function($scope) {
+
+//CONTROLLERS
+    .controller('MainCtrl', ['$scope', function($scope) {
         //empty for now
     }])
     .controller('CityCtrl', function($scope, city) {
         $scope.city = city;
     });
+
